@@ -8,5 +8,4 @@ app.include_router(productos.router)
 
 @app.get('/')
 async def read_root():
-    return{'Hello':'World'}
-
+    return{'Mensaje':'Bienvenidos a la API'}
