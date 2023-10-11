@@ -33,5 +33,29 @@ async def create_item(item: Item):
     return{'Message': 'Item created successfully'}
 
 @router.put('/{item_id}')
-async def update_item(item_id: int, item: Item):
-    return {'item_name': item.name, 'item_id': item_id, 'item_price': item.purchase_price}
+async def update_item(item_id: str, item: Item):
+    #return {'item_name': item.name, 'item_id': item_id, 'item_price': item.purchase_price}
+    prod_result = list(filter(lambda product: product.id == item_id, products))
+    if len(prod_result):
+        item_result = prod_result[0]
+        item_result.name = item.name
+        item_result.description = item.description
+        item_result.purchase_price = item.purchase_price
+        item_result.sales_price = item.sales_price
+        item_result.vendor = item.vendor
+        item_result.is_offer = item.is_offer
+        item_result.tax = item.tax
+
+        return item_result
+    
+    raise HTTPException(status_code=404, detail=f'El producto con el ID {item_id} no fue encontrado')
+
+@router.delete('/{item_id}')
+async def delete_item_id(item_id: str):
+    prod_result = list(filter(lambda product: product.id == item_id, products))
+    if len(prod_result):
+        item_result = prod_result[0]
+        products.remove(item_result)
+        return{'message': f'El producto con el ID {item_id} fue eliminado'}
+    
+    raise HTTPException(status_code=404, detail=f'El producto con el ID {item_id} no fue encontrado')
