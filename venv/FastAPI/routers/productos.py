@@ -8,10 +8,19 @@ router = APIRouter(prefix="/items",
                    responses={404: {"message": "No encontrado"}})
 
 products = []
+fake_items_db = [
+    {'item_name': 'foo'},
+    {'item_name': 'Baz'},
+    {'item_name': 'Bar'}
+]
 
 @router.get('/')
 async def read_products():
     return products
+
+@router.get('/fake/')
+async def read_fake_items(skip: int = 0, limit: int = 10):
+    return fake_items_db[skip: skip + limit]
 
 @router.get('/{item_id}')
 async def read_item(item_id: str):
